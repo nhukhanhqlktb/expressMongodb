@@ -1,23 +1,22 @@
-const db = require('../db.js');
+const Session = require('../models/session.model');
 const shortid = require('shortid');
 
-module.exports = function(req, res, next) {
-	let sessionId = shortid.generate();
-	let cart;
+module.exports = async function(req, res, next) {
+	let sessId = shortid.generate();
+	let session;
 	let countCart;
 
 	if (!req.signedCookies.sessionId) {
-		res.cookie('sessionId', sessionId, {
+		await Session.create( {sessionId: sessId} );
+		res.cookie('sessionId', sessId, {
 		signed: true});
-
-		db.get('sessions').push({sessionId: sessionId}).write();
+		session = await Session.findOne( {sessionId: sessId} );
+	} else {
+		session = await Session.findOne( {sessionId: req.signedCookies.sessionId} );
 	}
-
-	cart = db.get('sessions')
-		.find( {sessionId: req.signedCookies.sessionId} )
-		.get('cart').value();
-	if (cart) {
-		countCart = Object.values(cart).reduce((result, cur) => {
+	
+	if (session.cart) {
+		countCart = Object.values(session.cart).reduce((result, cur) => {
 			return result + cur;
 		});
 		res.locals.countCart = countCart;

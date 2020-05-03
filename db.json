@@ -25,6 +25,13 @@
       "avatar": "uploads\\28fbe069148dd3f1520163c5669500e6"
     }
   ],
-  "sessions": [],
+  "sessions": [
+    {
+      "sessionId": "NXcKGpbNF",
+      "cart": {
+        "null": 6
+      }
+    }
+  ],
   "transfers": []
 }

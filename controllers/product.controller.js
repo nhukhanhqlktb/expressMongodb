@@ -10,7 +10,7 @@ module.exports.index = async function(req, res) {
 	let start = (page - 1) * perPage;
 	limitPage = Math.ceil(sumDoc / perPage);
 	
-	let products = await Product.find({}, {_id: 0}, { skip: start, limit: perPage});
+	let products = await Product.find({}, null, { skip: start, limit: perPage});
 	res.render('products/index', {
 		products: products,
 		pageLink,
