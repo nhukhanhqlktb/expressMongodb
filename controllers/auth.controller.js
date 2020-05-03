@@ -1,14 +1,14 @@
-const db = require('../db.js');
+const User = require('../models/user.model');
 
 module.exports.login = function(req, res){
 	res.render('auth/login')
 };
 
-module.exports.postLogin = function(req, res) {
+module.exports.postLogin = async function(req, res) {
 	let email = req.body.email;
 	let password = req.body.password;
 
-	let user = db.get('users').find({ email: email}).value();
+	let user = await User.findOne( { email: email} );
 
 	if (!user){
 		res.render('auth/login', {
@@ -30,7 +30,7 @@ module.exports.postLogin = function(req, res) {
 		return;
 	}
 
-	res.cookie('userID', user.id, {
+	res.cookie('userID', user._id, {
 		signed: true
 	});
 	res.redirect('/users');
