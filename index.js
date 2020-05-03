@@ -4,7 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var mongoose = require('mongoose');
-var csurf = require('csurf');
+// var csurf = require('csurf'); - miss when login
 
 // ========= Mongoosejs - create connection =========
 mongoose.connect(process.env.MONGO_URL);
@@ -38,7 +38,7 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cookieParser(process.env.SESSION_SECRET)); //each id, it generates a private hash is different
 app.use(sessionMiddleware);
-app.use(csurf( {cookie: true}));
+// app.use(csurf( {cookie: true}));
 
 app.use(express.static('public'));
 

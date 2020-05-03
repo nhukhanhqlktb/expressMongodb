@@ -1,21 +1,20 @@
-const db = require('../db.js');
+const Product = require('../models/product.model');
 
-module.exports.index = function(req, res) {
+module.exports.index = async function(req, res) {
+
 	let page = parseInt(req.query.page) || 1;
-	let perPage = 8;
-	let limitPage = Math.ceil(db.get('products').value().length/perPage);
+	let perPage = 4;
+	let sumDoc = await Product.countDocuments();
 	let pageLink = 'products';
 
 	let start = (page - 1) * perPage;
-	let end = page * perPage;
-
-	let drop = (page - 1) * perPage;
-
+	limitPage = Math.ceil(sumDoc / perPage);
+	
+	let products = await Product.find({}, {_id: 0}, { skip: start, limit: perPage});
 	res.render('products/index', {
-		// products: db.get('products').value().slice(start, end)
-		products: db.get('products').drop(drop).take(perPage).value(),
-		limitPage,
+		products: products,
+		pageLink,
 		page,
-		pageLink
+		limitPage
 	});
 };
